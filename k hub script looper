@@ -1,0 +1,331 @@
+-- LocalScript in StarterPlayerScripts
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = LocalPlayer.PlayerGui
+screenGui.Name = "ScriptLooperGui"
+
+-- Create Frame (dark theme with gradient and shadows)
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 250, 0, 350)
+frame.Position = UDim2.new(0.5, -125, 0.5, -175)
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 40)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 30))
+}
+gradient.Parent = frame
+local shadow1 = Instance.new("UIStroke")
+shadow1.Thickness = 2
+shadow1.Color = Color3.fromRGB(15, 15, 20)
+shadow1.Transparency = 0.7
+shadow1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+shadow1.Parent = frame
+local shadow2 = Instance.new("UIStroke")
+shadow2.Thickness = 4
+shadow2.Color = Color3.fromRGB(10, 10, 15)
+shadow2.Transparency = 0.9
+shadow2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+shadow2.Parent = frame
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+-- Create Title Bar (highlighted with shadows)
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 30)
+titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+local titleGradient = Instance.new("UIGradient")
+titleGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 60)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 40, 50))
+}
+titleGradient.Parent = titleBar
+local titleShadow1 = Instance.new("UIStroke")
+titleShadow1.Thickness = 1
+titleShadow1.Color = Color3.fromRGB(15, 15, 20)
+titleShadow1.Transparency = 0.7
+titleShadow1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+titleShadow1.Parent = titleBar
+local titleShadow2 = Instance.new("UIStroke")
+titleShadow2.Thickness = 3
+titleShadow2.Color = Color3.fromRGB(10, 10, 15)
+titleShadow2.Transparency = 0.9
+titleShadow2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+titleShadow2.Parent = titleBar
+titleBar.Parent = frame
+
+-- Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(0.6, 0, 1, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Script Looper"
+titleLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 16
+titleLabel.Parent = titleBar
+
+-- Minimize Button
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 30, 0, 25)
+minimizeButton.Position = UDim2.new(0.7, 0, 0, 2)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(180, 180, 200)
+minimizeButton.Font = Enum.Font.Gotham
+minimizeButton.TextSize = 18
+local minShadow = Instance.new("UIStroke")
+minShadow.Thickness = 1
+minShadow.Color = Color3.fromRGB(15, 15, 20)
+minShadow.Transparency = 0.7
+minShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+minShadow.Parent = minimizeButton
+minimizeButton.Parent = titleBar
+
+-- Close Button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 25)
+closeButton.Position = UDim2.new(0.8, 0, 0, 2)
+closeButton.BackgroundColor3 = Color3.fromRGB(70, 30, 30)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(220, 150, 150)
+closeButton.Font = Enum.Font.Gotham
+closeButton.TextSize = 18
+local closeShadow = Instance.new("UIStroke")
+closeShadow.Thickness = 1
+closeShadow.Color = Color3.fromRGB(40, 15, 15)
+closeShadow.Transparency = 0.7
+closeShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+closeShadow.Parent = closeButton
+closeButton.Parent = titleBar
+
+-- Create Content Frame (toggled for minimize)
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 1, -30)
+contentFrame.Position = UDim2.new(0, 0, 0, 30)
+contentFrame.BackgroundTransparency = 1
+contentFrame.Parent = frame
+
+-- Create TextBox for script input
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0.9, 0, 0.35, 0)
+textBox.Position = UDim2.new(0.05, 0, 0.05, 0)
+textBox.MultiLine = true
+textBox.Text = "-- Paste your Lua script here"
+textBox.TextWrapped = true
+textBox.TextScaled = true
+textBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+local textGradient = Instance.new("UIGradient")
+textGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 55)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 45))
+}
+textGradient.Parent = textBox
+local textShadow = Instance.new("UIStroke")
+textShadow.Thickness = 1
+textShadow.Color = Color3.fromRGB(15, 15, 20)
+textShadow.Transparency = 0.7
+textShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+textShadow.Parent = textBox
+textBox.TextColor3 = Color3.fromRGB(200, 200, 220)
+textBox.Parent = contentFrame
+
+-- Cooldown Label
+local cooldownLabel = Instance.new("TextLabel")
+cooldownLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
+cooldownLabel.Position = UDim2.new(0.05, 0, 0.42, 0)
+cooldownLabel.Text = "Cooldown (sec):"
+cooldownLabel.TextScaled = true
+cooldownLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+cooldownLabel.BackgroundTransparency = 1
+cooldownLabel.Parent = contentFrame
+
+-- Cooldown TextBox
+local cooldownTextBox = Instance.new("TextBox")
+cooldownTextBox.Size = UDim2.new(0.3, 0, 0.1, 0)
+cooldownTextBox.Position = UDim2.new(0.6, 0, 0.42, 0)
+cooldownTextBox.Text = "1"
+cooldownTextBox.TextScaled = true
+cooldownTextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+local cooldownGradient = Instance.new("UIGradient")
+cooldownGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 55)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 45))
+}
+cooldownGradient.Parent = cooldownTextBox
+local cooldownShadow = Instance.new("UIStroke")
+cooldownShadow.Thickness = 1
+cooldownShadow.Color = Color3.fromRGB(15, 15, 20)
+cooldownShadow.Transparency = 0.7
+cooldownShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+cooldownShadow.Parent = cooldownTextBox
+cooldownTextBox.TextColor3 = Color3.fromRGB(200, 200, 220)
+cooldownTextBox.Parent = contentFrame
+
+-- Create Start Button
+local startButton = Instance.new("TextButton")
+startButton.Size = UDim2.new(0.4, 0, 0.1, 0)
+startButton.Position = UDim2.new(0.05, 0, 0.55, 0)
+startButton.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+local startGradient = Instance.new("UIGradient")
+startGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 150, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 120, 0))
+}
+startGradient.Parent = startButton
+local startShadow = Instance.new("UIStroke")
+startShadow.Thickness = 1
+startShadow.Color = Color3.fromRGB(0, 80, 0)
+startShadow.Transparency = 0.7
+startShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+startShadow.Parent = startButton
+startButton.Text = "Start"
+startButton.TextScaled = true
+startButton.TextColor3 = Color3.fromRGB(220, 240, 220)
+startButton.Font = Enum.Font.Gotham
+startButton.Parent = contentFrame
+
+-- Create Stop Button
+local stopButton = Instance.new("TextButton")
+stopButton.Size = UDim2.new(0.4, 0, 0.1, 0)
+stopButton.Position = UDim2.new(0.55, 0, 0.55, 0)
+stopButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+local stopGradient = Instance.new("UIGradient")
+stopGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 0, 0))
+}
+stopGradient.Parent = stopButton
+local stopShadow = Instance.new("UIStroke")
+stopShadow.Thickness = 1
+stopShadow.Color = Color3.fromRGB(100, 0, 0)
+stopShadow.Transparency = 0.7
+stopShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stopShadow.Parent = stopButton
+stopButton.Text = "Stop"
+stopButton.TextScaled = true
+stopButton.TextColor3 = Color3.fromRGB(240, 220, 220)
+stopButton.Font = Enum.Font.Gotham
+stopButton.Parent = contentFrame
+
+-- Create Output Label
+local outputLabel = Instance.new("TextLabel")
+outputLabel.Size = UDim2.new(0.9, 0, 0.25, 0)
+outputLabel.Position = UDim2.new(0.05, 0, 0.68, 0)
+outputLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+local outputGradient = Instance.new("UIGradient")
+outputGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 55)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 45))
+}
+outputGradient.Parent = outputLabel
+local outputShadow = Instance.new("UIStroke")
+outputShadow.Thickness = 1
+outputShadow.Color = Color3.fromRGB(15, 15, 20)
+outputShadow.Transparency = 0.7
+outputShadow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+outputShadow.Parent = outputLabel
+outputLabel.Text = "Output: "
+outputLabel.TextWrapped = true
+outputLabel.TextScaled = true
+outputLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
+outputLabel.Parent = contentFrame
+
+-- Variables for loop control
+local isLooping = false
+local loopCoroutine = nil
+local isMinimized = false
+
+-- Function to execute the script
+local function executeScript(scriptText)
+    if scriptText:match("^%s*$") then
+        outputLabel.Text = "Error: Empty script"
+        return
+    end
+    local success, func = pcall(loadstring, scriptText)
+    if success and func then
+        local successExec, result = pcall(func)
+        if successExec then
+            outputLabel.Text = "Output: Success"
+        else
+            outputLabel.Text = "Error: " .. tostring(result)
+        end
+    else
+        outputLabel.Text = "Error: Invalid script"
+    end
+end
+
+-- Start button functionality
+startButton.MouseButton1Click:Connect(function()
+    if not isLooping then
+        isLooping = true
+        startButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        stopButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+        
+        loopCoroutine = coroutine.create(function()
+            while isLooping do
+                executeScript(textBox.Text)
+                local cooldown = tonumber(cooldownTextBox.Text) or 1
+                if cooldown < 0.03 then cooldown = 0.03 end
+                wait(cooldown)
+            end
+        end)
+        coroutine.resume(loopCoroutine)
+    end
+end)
+
+-- Stop button functionality
+stopButton.MouseButton1Click:Connect(function()
+    if isLooping then
+        isLooping = false
+        startButton.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+        stopButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        outputLabel.Text = "Output: Loop stopped"
+    end
+end)
+
+-- Minimize button functionality
+minimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    contentFrame.Visible = not isMinimized
+    minimizeButton.Text = isMinimized and "+" or "-"
+    frame.Size = isMinimized and UDim2.new(0, 250, 0, 30) or UDim2.new(0, 250, 0, 350)
+end)
+
+-- Close button functionality
+closeButton.MouseButton1Click:Connect(function()
+    isLooping = false
+    screenGui.Enabled = false
+end)
+
+-- Dragging functionality
+local isDragging = false
+local dragStartPos, frameStartPos
+
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        isDragging = true
+        dragStartPos = input.Position
+        frameStartPos = frame.Position
+    end
+end)
+
+titleBar.InputChanged:Connect(function(input)
+    if isDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStartPos
+        frame.Position = UDim2.new(
+            frameStartPos.X.Scale,
+            frameStartPos.X.Offset + delta.X,
+            frameStartPos.Y.Scale,
+            frameStartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        isDragging = false
+    end
+end)
