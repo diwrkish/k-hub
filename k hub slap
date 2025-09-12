@@ -1,0 +1,509 @@
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local TS = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+local LP = Players.LocalPlayer
+local ESE = RS:WaitForChild("EquipSlapEvent")
+local function dp(m) print("[InfYieldGui] "..m) end
+local s,r = pcall(function() local pg = LP:WaitForChild("PlayerGui",5) if not pg then error("PlayerGui not found") end return pg end)
+if not s then dp("Error: "..tostring(r)) return end
+local PG = r
+dp("PlayerGui found, creating GUIs")
+local NG = Instance.new("ScreenGui")
+NG.Name = "InfYieldNotifyGui"
+NG.Parent = PG
+NG.ResetOnSpawn = false
+NG.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+NG.DisplayOrder = 101
+local NF = Instance.new("Frame")
+NF.Size = UDim2.new(0,300,0,100)
+NF.Position = UDim2.new(0.5,-150,0.3,0)
+NF.BackgroundColor3 = Color3.fromRGB(20,20,20)
+NF.BackgroundTransparency = 0.2
+NF.BorderSizePixel = 0
+NF.Parent = NG
+local NC = Instance.new("UICorner")
+NC.CornerRadius = UDim.new(0,12)
+NC.Parent = NF
+local NS = Instance.new("UIStroke")
+NS.Color = Color3.fromRGB(100,100,100)
+NS.Thickness = 2
+NS.Transparency = 0.5
+NS.Parent = NF
+local NSS = Instance.new("UIStroke")
+NSS.Color = Color3.fromRGB(0,0,0)
+NSS.Thickness = 4
+NSS.Transparency = 0.7
+NSS.Parent = NF
+local NTL = Instance.new("TextLabel")
+NTL.Size = UDim2.new(1,0,1,0)
+NTL.BackgroundTransparency = 1
+NTL.Text = "To activate Inf Yield, tap C"
+NTL.TextColor3 = Color3.fromRGB(220,220,220)
+NTL.TextScaled = true
+NTL.Font = Enum.Font.GothamBold
+NTL.TextSize = 24
+NTL.Parent = NF
+local function fadeOutNG()
+    dp("Starting notification fade-out")
+    local ti = TweenInfo.new(1,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut)
+    local ft = TS:Create(NF,ti,{BackgroundTransparency=1})
+    local tt = TS:Create(NTL,ti,{TextTransparency=1})
+    local st = TS:Create(NS,ti,{Transparency=1})
+    local sst = TS:Create(NSS,ti,{Transparency=1})
+    ft:Play()
+    tt:Play()
+    st:Play()
+    sst:Play()
+    ft.Completed:Connect(function() dp("Notification fade-out complete, destroying GUI") NG:Destroy() end)
+end
+dp("Notification GUI created, waiting 6 seconds before fade-out")
+wait(6)
+fadeOutNG()
+local SG = Instance.new("ScreenGui")
+SG.Name = "GloveGiverGUI"
+SG.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+SG.DisplayOrder = 100
+SG.Parent = PG
+local MF = Instance.new("Frame")
+MF.Size = UDim2.new(0,400,0,500)
+MF.Position = UDim2.new(0.5,-200,0.5,-250)
+MF.AnchorPoint = Vector2.new(0.5,0.5)
+MF.BackgroundColor3 = Color3.fromRGB(25,25,35)
+MF.BorderSizePixel = 0
+MF.ClipsDescendants = true
+MF.Parent = SG
+local C = Instance.new("UICorner")
+C.CornerRadius = UDim.new(0,12)
+C.Parent = MF
+local G = Instance.new("UIGradient")
+G.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(45,45,60)),ColorSequenceKeypoint.new(1,Color3.fromRGB(25,25,35))})
+G.Rotation = 45
+G.Parent = MF
+local H = Instance.new("Frame")
+H.Size = UDim2.new(1,0,0,60)
+H.BackgroundColor3 = Color3.fromRGB(35,35,45)
+H.BorderSizePixel = 0
+H.Parent = MF
+local HC = Instance.new("UICorner")
+HC.CornerRadius = UDim.new(0,12)
+HC.Parent = H
+local CB = Instance.new("TextButton")
+CB.Size = UDim2.new(0,30,0,30)
+CB.Position = UDim2.new(1,-35,0,15)
+CB.Text = "X"
+CB.TextColor3 = Color3.fromRGB(255,255,255)
+CB.BackgroundColor3 = Color3.fromRGB(220,60,60)
+CB.Font = Enum.Font.GothamBold
+CB.TextSize = 16
+CB.ZIndex = 2
+CB.Parent = H
+local CBC = Instance.new("UICorner")
+CBC.CornerRadius = UDim.new(0,6)
+CBC.Parent = CB
+local MB = Instance.new("TextButton")
+MB.Size = UDim2.new(0,30,0,30)
+MB.Position = UDim2.new(1,-70,0,15)
+MB.Text = "_"
+MB.TextColor3 = Color3.fromRGB(255,255,255)
+MB.BackgroundColor3 = Color3.fromRGB(100,100,140)
+MB.Font = Enum.Font.GothamBold
+MB.TextSize = 16
+MB.ZIndex = 2
+MB.Parent = H
+local MBC = Instance.new("UICorner")
+MBC.CornerRadius = UDim.new(0,6)
+MBC.Parent = MB
+local T = Instance.new("TextLabel")
+T.Size = UDim2.new(1,-80,1,0)
+T.Text = "✨ ALL SLAPS GIVER ✨"
+T.TextColor3 = Color3.fromRGB(255,215,0)
+T.BackgroundTransparency = 1
+T.Font = Enum.Font.GothamBold
+T.TextSize = 20
+T.Parent = H
+local ST = Instance.new("TextLabel")
+ST.Size = UDim2.new(1,-80,0,20)
+ST.Position = UDim2.new(0,0,0.6,0)
+ST.Text = "All 25 slap types available"
+ST.TextColor3 = Color3.fromRGB(180,180,200)
+ST.BackgroundTransparency = 1
+ST.Font = Enum.Font.Gotham
+ST.TextSize = 14
+ST.Parent = H
+-- Tab System
+local TabFrame = Instance.new("Frame")
+TabFrame.Size = UDim2.new(1,0,0,40)
+TabFrame.Position = UDim2.new(0,0,0.12,0)
+TabFrame.BackgroundColor3 = Color3.fromRGB(30,30,40)
+TabFrame.BorderSizePixel = 0
+TabFrame.Parent = MF
+local TabC = Instance.new("UICorner")
+TabC.CornerRadius = UDim.new(0,8)
+TabC.Parent = TabFrame
+-- Tab Buttons
+local SlapTabButton = Instance.new("TextButton")
+SlapTabButton.Size = UDim2.new(0.5,0,1,-10)
+SlapTabButton.Position = UDim2.new(0,5,0,5)
+SlapTabButton.Text = "Slap Giver"
+SlapTabButton.TextColor3 = Color3.fromRGB(255,255,255)
+SlapTabButton.BackgroundColor3 = Color3.fromRGB(50,50,60)
+SlapTabButton.Font = Enum.Font.GothamBold
+SlapTabButton.TextSize = 14
+SlapTabButton.Parent = TabFrame
+local SlapTabC = Instance.new("UICorner")
+SlapTabC.CornerRadius = UDim.new(0,6)
+SlapTabC.Parent = SlapTabButton
+local FarmTabButton = Instance.new("TextButton")
+FarmTabButton.Size = UDim2.new(0.5,0,1,-10)
+FarmTabButton.Position = UDim2.new(0.5,0,0,5)
+FarmTabButton.Text = "Slap Farm"
+FarmTabButton.TextColor3 = Color3.fromRGB(255,255,255)
+FarmTabButton.BackgroundColor3 = Color3.fromRGB(40,40,50)
+FarmTabButton.Font = Enum.Font.GothamBold
+FarmTabButton.TextSize = 14
+FarmTabButton.Parent = TabFrame
+local FarmTabC = Instance.new("UICorner")
+FarmTabC.CornerRadius = UDim.new(0,6)
+FarmTabC.Parent = FarmTabButton
+-- Slap Giver Tab Content
+local SlapTab = Instance.new("Frame")
+SlapTab.Size = UDim2.new(0.9,0,0.68,0)
+SlapTab.Position = UDim2.new(0.05,0,0.2,0)
+SlapTab.BackgroundTransparency = 1
+SlapTab.Parent = MF
+local IC = Instance.new("Frame")
+IC.Size = UDim2.new(1,0,0,80)
+IC.Position = UDim2.new(0,0,0,0)
+IC.BackgroundColor3 = Color3.fromRGB(40,40,50)
+IC.BorderSizePixel = 0
+IC.Parent = SlapTab
+local ICN = Instance.new("UICorner")
+ICN.CornerRadius = UDim.new(0,8)
+ICN.Parent = IC
+local IL = Instance.new("TextLabel")
+IL.Size = UDim2.new(1,0,0,30)
+IL.Text = "SLAP NAME"
+IL.TextColor3 = Color3.fromRGB(200,200,220)
+IL.BackgroundTransparency = 1
+IL.Font = Enum.Font.GothamBold
+IL.TextSize = 14
+IL.Parent = IC
+local GI = Instance.new("TextBox")
+GI.Size = UDim2.new(0.9,0,0,40)
+GI.Position = UDim2.new(0.05,0,0.4,0)
+GI.PlaceholderText = "Enter slap name..."
+GI.Text = "Error"
+GI.TextColor3 = Color3.fromRGB(255,255,255)
+GI.BackgroundColor3 = Color3.fromRGB(50,50,60)
+GI.Font = Enum.Font.Gotham
+GI.TextSize = 16
+GI.Parent = IC
+local IFC = Instance.new("UICorner")
+IFC.CornerRadius = UDim.new(0,6)
+IFC.Parent = GI
+local AS = {"AppleSlap","BalloonSlap","BigSlap","BlockSlap","BlowSlap","BrickSlap","DefaultSlap","DiamondSlap","DiceSlap","Error","FruitSlap","GalaxySlap","God's Hand","GoldSlap","LuckySlap","MagnetSlap","MailSlap","PoisonSlap","RainbowLuckySlap","SpinSlap","StreakSlap","StunSlap","SwapperSlap","TixSlap","TripleSlap"}
+local SF = Instance.new("ScrollingFrame")
+SF.Size = UDim2.new(1,0,0,300)
+SF.Position = UDim2.new(0,0,0.25,0)
+SF.BackgroundTransparency = 1
+SF.ScrollBarThickness = 6
+SF.CanvasSize = UDim2.new(0,0,0,math.ceil(#AS/3)*50)
+SF.Parent = SlapTab
+local GL = Instance.new("TextLabel")
+GL.Size = UDim2.new(1,0,0,20)
+GL.Text = "ALL SLAP TYPES ("..#AS..")"
+GL.TextColor3 = Color3.fromRGB(200,200,220)
+GL.BackgroundTransparency = 1
+GL.Font = Enum.Font.GothamBold
+GL.TextSize = 14
+GL.Parent = SF
+local UIG = Instance.new("UIGridLayout")
+UIG.CellSize = UDim2.new(0.3, -5, 0, 35)
+UIG.CellPadding = UDim2.new(0, 5, 0, 10)
+UIG.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIG.VerticalAlignment = Enum.VerticalAlignment.Top
+UIG.SortOrder = Enum.SortOrder.LayoutOrder
+UIG.Parent = SF
+for i,s in ipairs(AS) do
+    local SB = Instance.new("TextButton")
+    SB.Text = s
+    SB.TextColor3 = Color3.fromRGB(255,255,255)
+    SB.BackgroundColor3 = Color3.fromRGB(15,15,15)
+    SB.Font = Enum.Font.GothamBold
+SB.TextSize = 12
+    SB.TextWrapped = true
+    SB.Parent = SF
+    local BCN = Instance.new("UICorner")
+    BCN.CornerRadius = UDim.new(0,6)
+    BCN.Parent = SB
+    SB.MouseButton1Click:Connect(function() 
+        GI.Text = s 
+        tweenButton(SB) 
+    end)
+end
+local GB = Instance.new("TextButton")
+GB.Size = UDim2.new(0.9,0,0,50)
+GB.Position = UDim2.new(0.05,0,0.9,0)
+GB.Text = "🎯 GIVE SLAP"
+GB.TextColor3 = Color3.fromRGB(255,255,255)
+GB.BackgroundColor3 = Color3.fromRGB(0,150,255)
+GB.Font = Enum.Font.GothamBold
+GB.TextSize = 18
+GB.Parent = SlapTab
+local GBC = Instance.new("UICorner")
+GBC.CornerRadius = UDim.new(0,8)
+GBC.Parent = GB
+local GBG = Instance.new("UIGradient")
+GBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(0,170,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(0,120,255))})
+GBG.Rotation = 90
+GBG.Parent = GB
+-- Slap Farm Tab Content
+local FarmTab = Instance.new("Frame")
+FarmTab.Size = UDim2.new(0.9,0,0.68,0)
+FarmTab.Position = UDim2.new(0.05,0,0.2,0)
+FarmTab.BackgroundTransparency = 1
+FarmTab.Visible = false
+FarmTab.Parent = MF
+local FarmIC = Instance.new("Frame")
+FarmIC.Size = UDim2.new(1,0,0,80)
+FarmIC.Position = UDim2.new(0,0,0,0)
+FarmIC.BackgroundColor3 = Color3.fromRGB(40,40,50)
+FarmIC.BorderSizePixel = 0
+FarmIC.Parent = FarmTab
+local FarmICN = Instance.new("UICorner")
+FarmICN.CornerRadius = UDim.new(0,8)
+FarmICN.Parent = FarmIC
+local FarmIL = Instance.new("TextLabel")
+FarmIL.Size = UDim2.new(1,0,0,30)
+FarmIL.Text = "FARM SLAP NAME"
+FarmIL.TextColor3 = Color3.fromRGB(200,200,220)
+FarmIL.BackgroundTransparency = 1
+FarmIL.Font = Enum.Font.GothamBold
+FarmIL.TextSize = 14
+FarmIL.Parent = FarmIC
+local FarmGI = Instance.new("TextBox")
+FarmGI.Size = UDim2.new(0.9,0,0,40)
+FarmGI.Position = UDim2.new(0.05,0,0.4,0)
+FarmGI.PlaceholderText = "Enter slap name for farm..."
+FarmGI.Text = "DefaultSlap"
+FarmGI.TextColor3 = Color3.fromRGB(255,255,255)
+FarmGI.BackgroundColor3 = Color3.fromRGB(50,50,60)
+FarmGI.Font = Enum.Font.Gotham
+FarmGI.TextSize = 16
+FarmGI.Parent = FarmIC
+local FarmIFC = Instance.new("UICorner")
+FarmIFC.CornerRadius = UDim.new(0,6)
+FarmIFC.Parent = FarmGI
+local FarmSB = Instance.new("TextButton")
+FarmSB.Size = UDim2.new(0.9,0,0,50)
+FarmSB.Position = UDim2.new(0.05,0,0.25,0)
+FarmSB.Text = "🎯 SET FARM SLAP"
+FarmSB.TextColor3 = Color3.fromRGB(255,255,255)
+FarmSB.BackgroundColor3 = Color3.fromRGB(0,150,255)
+FarmSB.Font = Enum.Font.GothamBold
+FarmSB.TextSize = 18
+FarmSB.Parent = FarmTab
+local FarmSBC = Instance.new("UICorner")
+FarmSBC.CornerRadius = UDim.new(0,8)
+FarmSBC.Parent = FarmSB
+local FarmSBG = Instance.new("UIGradient")
+FarmSBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(0,170,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(0,120,255))})
+FarmSBG.Rotation = 90
+FarmSBG.Parent = FarmSB
+local SFB = Instance.new("TextButton")
+SFB.Size = UDim2.new(0.9,0,0,50)
+SFB.Position = UDim2.new(0.05,0,0.4,0)
+SFB.Text = "🌾 START SLAP FARM"
+SFB.TextColor3 = Color3.fromRGB(255,255,255)
+SFB.BackgroundColor3 = Color3.fromRGB(200,50,50)
+SFB.Font = Enum.Font.GothamBold
+SFB.TextSize = 18
+SFB.Parent = FarmTab
+local SFBC = Instance.new("UICorner")
+SFBC.CornerRadius = UDim.new(0,8)
+SFBC.Parent = SFB
+local SFBG = Instance.new("UIGradient")
+SFBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(220,60,60)),ColorSequenceKeypoint.new(1,Color3.fromRGB(180,40,40))})
+SFBG.Rotation = 90
+SFBG.Parent = SFB
+local SL = Instance.new("TextLabel")
+SL.Size = UDim2.new(0.9,0,0,20)
+SL.Position = UDim2.new(0.05,0,0.55,0)
+SL.Text = "Ready to give any slap"
+SL.TextColor3 = Color3.fromRGB(150,150,170)
+SL.BackgroundTransparency = 1
+SL.Font = Enum.Font.Gotham
+SL.TextSize = 14
+SL.Parent = FarmTab
+local function tweenButton(b)
+    local os = b.Size
+    local ti = TweenInfo.new(0.1,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
+    local su = TS:Create(b,ti,{Size=os+UDim2.new(0,5,0,5)})
+    local sd = TS:Create(b,ti,{Size=os})
+    su:Play()
+    su.Completed:Connect(function() sd:Play() end)
+end
+local function ag()
+    local ti = TweenInfo.new(0.2,Enum.EasingStyle.Back,Enum.EasingDirection.Out)
+    local su = TS:Create(GB,ti,{Size=UDim2.new(0.85,0,0,45)})
+    local sd = TS:Create(GB,ti,{Size=UDim2.new(0.9,0,0,50)})
+    su:Play()
+    su.Completed:Connect(function() sd:Play() end)
+end
+local function asf()
+    local ti = TweenInfo.new(0.2,Enum.EasingStyle.Back,Enum.EasingDirection.Out)
+    local su = TS:Create(SFB,ti,{Size=UDim2.new(0.85,0,0,45)})
+    local sd = TS:Create(SFB,ti,{Size=UDim2.new(0.9,0,0,50)})
+    su:Play()
+    su.Completed:Connect(function() sd:Play() end)
+end
+local function setFarmSlap()
+    local ti = TweenInfo.new(0.2,Enum.EasingStyle.Back,Enum.EasingDirection.Out)
+    local su = TS:Create(FarmSB,ti,{Size=UDim2.new(0.85,0,0,45)})
+    local sd = TS:Create(FarmSB,ti,{Size=UDim2.new(0.9,0,0,50)})
+    su:Play()
+    su.Completed:Connect(function() sd:Play() end)
+end
+local SFR = false
+local SFC = nil
+local CurrentFarmSlap = "DefaultSlap"
+local function sfl()
+    while SFR do
+        local s,e = pcall(function()
+            if not LP.Character then return end
+            local se = LP.Character:WaitForChild(CurrentFarmSlap):WaitForChild("Event")
+            for i,v in pairs(Players:GetPlayers()) do
+                if v~=LP and v.Character then
+                    local a = {"slash",v.Character,Vector3.new(-8.914801597595215,2.4258898179141397e-07,4.53059720993042)}
+                    se:FireServer(unpack(a))
+                end
+            end
+        end)
+        if not s then
+            SL.Text = "❌ Slap Farm Error: "..tostring(e)
+            SL.TextColor3 = Color3.fromRGB(255,100,100)
+            SFR = false
+            SFB.Text = "🌾 START SLAP FARM"
+            SFB.BackgroundColor3 = Color3.fromRGB(200,50,50)
+            SFBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(220,60,60)),ColorSequenceKeypoint.new(1,Color3.fromRGB(180,40,40))})
+        end
+        task.wait()
+    end
+end
+local function tsf()
+    SFR = not SFR
+    if SFR then
+        SFB.Text = "🛑 STOP SLAP FARM"
+        SFB.BackgroundColor3 = Color3.fromRGB(50,200,50)
+        SFBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(60,220,60)),ColorSequenceKeypoint.new(1,Color3.fromRGB(40,180,40))})
+        SL.Text = "🌾 Slap Farm running with "..CurrentFarmSlap
+        SL.TextColor3 = Color3.fromRGB(100,255,100)
+        SFC = coroutine.create(sfl)
+        coroutine.resume(SFC)
+    else
+        SFB.Text = "🌾 START SLAP FARM"
+        SFB.BackgroundColor3 = Color3.fromRGB(200,50,50)
+        SFBG.Color = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(220,60,60)),ColorSequenceKeypoint.new(1,Color3.fromRGB(180,40,40))})
+        SL.Text = "🌾 Slap Farm stopped"
+        SL.TextColor3 = Color3.fromRGB(150,150,170)
+        SFR = false
+    end
+    asf()
+end
+local function gs()
+    local sn = GI.Text
+    if sn=="" then return end
+    local a = {[1]=sn}
+    local s,e = pcall(function() ESE:FireServer(unpack(a)) end)
+    if s then
+        SL.Text = "✅ "..sn.." given!"
+        SL.TextColor3 = Color3.fromRGB(100,255,100)
+    else
+        SL.Text = "❌ Error: "..tostring(e)
+        SL.TextColor3 = Color3.fromRGB(255,100,100)
+    end
+    ag()
+end
+local function setFarmSlapType()
+    local sn = FarmGI.Text
+    if sn=="" then return end
+    local a = {[1]=sn}
+    local s,e = pcall(function() ESE:FireServer(unpack(a)) end)
+    if s then
+        CurrentFarmSlap = sn
+        SL.Text = "✅ Farm slap set to "..sn
+        SL.TextColor3 = Color3.fromRGB(100,255,100)
+    else
+        SL.Text = "❌ Error: "..tostring(e)
+        SL.TextColor3 = Color3.fromRGB(255,100,100)
+    end
+    setFarmSlap()
+end
+local function showSlapTab()
+    SlapTab.Visible = true
+    FarmTab.Visible = false
+    SlapTabButton.BackgroundColor3 = Color3.fromRGB(50,50,60)
+    FarmTabButton.BackgroundColor3 = Color3.fromRGB(40,40,50)
+end
+local function showFarmTab()
+    SlapTab.Visible = false
+    FarmTab.Visible = true
+    SlapTabButton.BackgroundColor3 = Color3.fromRGB(40,40,50)
+    FarmTabButton.BackgroundColor3 = Color3.fromRGB(50,50,60)
+end
+local IM = false
+local OS = MF.Size
+local MS = UDim2.new(0,200,0,60)
+local function tm()
+    IM = not IM
+    if IM then
+        local ti = TweenInfo.new(0.3,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
+        local mt = TS:Create(MF,ti,{Size=MS,Position=UDim2.new(0.5,-100,0.5,-30)})
+        for _,c in ipairs(MF:GetChildren()) do if c~=H and c:IsA("GuiObject") then c.Visible=false end end
+        mt:Play()
+        MB.Text = "+"
+    else
+        local ti = TweenInfo.new(0.3,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
+        local mt = TS:Create(MF,ti,{Size=OS,Position=UDim2.new(0.5,-200,0.5,-250)})
+        for _,c in ipairs(MF:GetChildren()) do if c:IsA("GuiObject") then c.Visible=true end end
+        mt:Play()
+        MB.Text = "_"
+    end
+end
+local function cg()
+    local ti = TweenInfo.new(0.3,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
+    local ct = TS:Create(MF,ti,{Size=UDim2.new(0,0,0,0),Position=UDim2.new(0.5,0,0.5,0)})
+    ct:Play()
+    ct.Completed:Connect(function() SG:Destroy() end)
+end
+SlapTabButton.MouseButton1Click:Connect(showSlapTab)
+FarmTabButton.MouseButton1Click:Connect(showFarmTab)
+GB.MouseButton1Click:Connect(gs)
+GI.FocusLost:Connect(function(ep) if ep then gs() end end)
+FarmSB.MouseButton1Click:Connect(setFarmSlapType)
+FarmGI.FocusLost:Connect(function(ep) if ep then setFarmSlapType() end end)
+SFB.MouseButton1Click:Connect(tsf)
+CB.MouseButton1Click:Connect(cg)
+MB.MouseButton1Click:Connect(tm)
+local function sbh(b,nc,hc)
+    b.MouseEnter:Connect(function() b.BackgroundColor3=hc end)
+    b.MouseLeave:Connect(function() b.BackgroundColor3=nc end)
+end
+sbh(CB,Color3.fromRGB(220,60,60),Color3.fromRGB(255,80,80))
+sbh(MB,Color3.fromRGB(100,100,140),Color3.fromRGB(120,120,160))
+sbh(SlapTabButton,Color3.fromRGB(40,40,50),Color3.fromRGB(60,60,70))
+sbh(FarmTabButton,Color3.fromRGB(40,40,50),Color3.fromRGB(60,60,70))
+GB.MouseEnter:Connect(function() GB.BackgroundColor3=Color3.fromRGB(0,170,255) end)
+GB.MouseLeave:Connect(function() GB.BackgroundColor3=Color3.fromRGB(0,150,255) end)
+FarmSB.MouseEnter:Connect(function() FarmSB.BackgroundColor3=Color3.fromRGB(0,170,255) end)
+FarmSB.MouseLeave:Connect(function() FarmSB.BackgroundColor3=Color3.fromRGB(0,150,255) end)
+SFB.MouseEnter:Connect(function() SFB.BackgroundColor3=SFR and Color3.fromRGB(60,220,60) or Color3.fromRGB(220,60,60) end)
+SFB.MouseLeave:Connect(function() SFB.BackgroundColor3=SFR and Color3.fromRGB(50,200,50) or Color3.fromRGB(200,50,50) end)
+local D = false
+local DS = nil
+local SP = nil
+H.InputBegan:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 then D=true DS=i.Position SP=MF.Position end end)
+H.InputChanged:Connect(function(i) if D and i.UserInputType==Enum.UserInputType.MouseMovement then local d=i.Position-DS MF.Position=UDim2.new(SP.X.Scale,SP.X.Offset+d.X,SP.Y.Scale,SP.Y.Offset+d.Y) end end)
+H.InputEnded:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 then D=false end end)
+UIS.InputBegan:Connect(function(i,gp) if i.KeyCode==Enum.KeyCode.C and not gp then dp("Activating Infinite Yield") loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end end)
