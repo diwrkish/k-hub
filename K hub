@@ -1,480 +1,110 @@
--- Load Rayfield UI Library (assuming it's set up in your Roblox environment)
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
--- Create the Rayfield UI Window
-local Window = Rayfield:CreateWindow({
-    Name = "k hub",
-    LoadingTitle = "rayfield ui",
-    LoadingSubtitle = "by diwrkish",
-    ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "RayfieldConfig",
-        FileName = "LoopScriptConfig"
-    }
-})
-
--- Create the Main Tab
-local MainTab = Window:CreateTab("script looper", 4483362458) -- Icon ID for a gear
-
--- Variables for Main Tab loop and cooldown
-local isLooping = false
-local userScript = "" -- Store the user-entered script
-local cooldown = 1 -- Default cooldown in seconds
-local useCooldown = true -- Flag to enable/disable cooldown
-
--- Function to run the user-entered script in a loop (Main Tab)
-local function runScript()
-    while isLooping do
-        if userScript ~= "" then
-            local success, err = pcall(function()
-                loadstring(userScript)()
-            end)
-            if not success then
-                warn("Script error: " .. err)
-            end
-        end
-        if useCooldown then
-            wait(cooldown) -- Use the user-defined cooldown
-        else
-            wait(0) -- No cooldown (run as fast as possible)
-        end
-    end
+local R=loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local W=R:CreateWindow({Name="Script Loop UI",LoadingTitle="K HUB",LoadingSubtitle="by Sirius",ConfigurationSaving={Enabled=true,FolderName="RayfieldConfig",FileName="LoopScriptConfig"}})
+local M=W:CreateTab("Main",4483362458)
+local L=false
+local S=""
+local C=1
+local U=true
+local function RS()
+while L do
+if S~=""then
+local s,e=pcall(function()loadstring(S)()end)
+if not s then warn("Script error: "..e)end
 end
-
--- Create a TextBox for entering the script (Main Tab)
-local scriptInput = MainTab:CreateInput({
-    Name = "Enter Lua Script",
-    PlaceholderText = "Enter your Lua script here",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        userScript = Text -- Store the entered script
-    end
-})
-
--- Create a TextBox for entering the cooldown (Main Tab)
-MainTab:CreateInput({
-    Name = "Set Cooldown (seconds)",
-    PlaceholderText = "Enter cooldown (e.g., 1.5)",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        local newCooldown = tonumber(Text) -- Convert input to number
-        if newCooldown and newCooldown > 0 then
-            cooldown = newCooldown
-            Rayfield:Notify({
-                Title = "Cooldown Updated",
-                Content = "Cooldown set to " .. newCooldown .. " seconds.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Invalid Cooldown",
-                Content = "Please enter a valid number greater than 0.",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button to start/stop the loop (Main Tab)
-MainTab:CreateButton({
-    Name = "Start/Stop Loop",
-    Callback = function()
-        isLooping = not isLooping -- Toggle the loop state
-        if isLooping then
-            Rayfield:Notify({
-                Title = "Loop Started",
-                Content = "The script is now looping" .. (useCooldown and " with a " .. cooldown .. "s cooldown!" or " without cooldown!"),
-                Duration = 3
-            })
-            spawn(runScript) -- Start the loop in a new thread
-        else
-            Rayfield:Notify({
-                Title = "Loop Stopped",
-                Content = "The script loop has been stopped.",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button to toggle cooldown on/off (Main Tab)
-MainTab:CreateButton({
-    Name = "Toggle Cooldown",
-    Callback = function()
-        useCooldown = not useCooldown
-        Rayfield:Notify({
-            Title = "Cooldown " .. (useCooldown and "Enabled" or "Disabled"),
-            Content = useCooldown and "Loop will use the set cooldown (" .. cooldown .. "s)." or "Loop will run without cooldown.",
-            Duration = 3
-        })
-    end
-})
-
--- Create a Label for instructions (Main Tab)
-MainTab:CreateLabel("Enter your Lua script, set cooldown, and control the loop")
-
--- Create the Scripts Tab
-local ScriptsTab = Window:CreateTab("Scripts", 4483362458) -- Icon ID for a gear
-
--- Create a Button for Infinite Yield (Scripts Tab)
-ScriptsTab:CreateButton({
-    Name = "Infinite Yield",
-    Callback = function()
-        local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "Infinite Yield Loaded",
-                Content = "Infinite Yield script has been executed.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Load Failed",
-                Content = "Failed to load Infinite Yield: " .. err,
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Dex Explorer (Scripts Tab)
-ScriptsTab:CreateButton({
-    Name = "Dex",
-    Callback = function()
-        local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/MariyaFurmanova/Library/main/dex2.0", true))()
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "Dex Loaded",
-                Content = "Dex Explorer script has been executed.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Load Failed",
-                Content = "Failed to load Dex Explorer: " .. err,
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Label for instructions (Scripts Tab)
-ScriptsTab:CreateLabel("Click a button to load the respective script")
-
--- Create the Slap Tower Tab
-local SlapTowerTab = Window:CreateTab("Slap Tower", 4483362458) -- Icon ID for a gear
-
--- Variables for Slap Tower loops
-local isTPEveryoneLooping = false
-local isTimestopLooping = false
-local isBlackholeLooping = false
-local timestopCooldown = 0.5 -- Default cooldown for timestop loop in seconds
-local blackholeCooldown = 0.1 -- Fixed cooldown for blackhole loop in seconds
-
--- Function for TP Everyone loop
-local function tpEveryoneLoop()
-    while isTPEveryoneLooping do
-        for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-            if player ~= game:GetService("Players").LocalPlayer then
-                local args = {
-                    "swap",
-                    Vector3.new(167.49005126953125, 71.39762115478516, -26.157346725463867),
-                    Vector3.new(92.65496826171875, 15.347707748413086, -55.331329345703125),
-                    player
-                }
-                local character = game:GetService("Players").LocalPlayer.Character
-                if character and character:FindFirstChild("SwapperSlap") and character.SwapperSlap:FindFirstChild("Event") then
-                    print("Firing TP for: " .. player.Name)
-                    character.SwapperSlap.Event:FireServer(unpack(args))
-                else
-                    print("SwapperSlap or Event not found for LocalPlayer")
-                end
-            end
-        end
-        wait(0.5) -- Fixed 0.5s delay to reduce server strain
-    end
+if U then wait(C)else wait(0)end
 end
-
--- Function for Timestop Spam loop
-local function timestopLoop()
-    while isTimestopLooping do
-        local success, err = pcall(function()
-            local args = {
-                "timestop"
-            }
-            local character = game:GetService("Players").LocalPlayer.Character
-            if character and character:FindFirstChild("God's Hand") and character["God's Hand"]:FindFirstChild("Event") then
-                print("Firing timestop for LocalPlayer")
-                character["God's Hand"].Event:FireServer(unpack(args))
-            else
-                print("God's Hand or Event not found for LocalPlayer")
-            end
-        end)
-        if not success then
-            warn("Timestop error: " .. err)
-        end
-        wait(timestopCooldown) -- Use configurable timestop cooldown
-    end
 end
-
--- Function for Blackhole Spam loop
-local function blackholeLoop()
-    while isBlackholeLooping do
-        local success, err = pcall(function()
-            local character = game:GetService("Players").LocalPlayer.Character
-            if character and character:FindFirstChild("GalaxySlap") and character.GalaxySlap:FindFirstChild("BlackholeEvent") then
-                print("Firing blackhole for LocalPlayer")
-                character.GalaxySlap.BlackholeEvent:FireServer()
-            else
-                print("GalaxySlap or BlackholeEvent not found for LocalPlayer")
-            end
-        end)
-        if not success then
-            warn("Blackhole error: " .. err)
-        end
-        wait(blackholeCooldown) -- Fixed 0.1s cooldown
-    end
+local SI=M:CreateInput({Name="Enter Lua Script",PlaceholderText="Enter your Lua script here",RemoveTextAfterFocusLost=false,Callback=function(t)S=t end})
+M:CreateInput({Name="Set Cooldown (seconds)",PlaceholderText="Enter cooldown (e.g., 1.5)",RemoveTextAfterFocusLost=false,Callback=function(t)
+local n=tonumber(t)
+if n and n>0 then C=n;R:Notify({Title="Cooldown Updated",Content="Cooldown set to "..n.." seconds.",Duration=3})
+else R:Notify({Title="Invalid Cooldown",Content="Please enter a valid number greater than 0.",Duration=3})end
+end})
+M:CreateButton({Name="Start/Stop Loop",Callback=function()L=not L
+if L then R:Notify({Title="Loop Started",Content="The script is now looping"..(U and " with a "..C.."s cooldown!" or " without cooldown!"),Duration=3})spawn(RS)
+else R:Notify({Title="Loop Stopped",Content="The script loop has been stopped.",Duration=3})end
+end})
+M:CreateButton({Name="Toggle Cooldown",Callback=function()U=not U
+R:Notify({Title="Cooldown "..(U and "Enabled" or "Disabled"),Content=U and "Loop will use the set cooldown ("..C.."s)." or "Loop will run without cooldown.",Duration=3})
+end})
+M:CreateLabel("Enter your Lua script, set cooldown, and control the loop")
+local ST=W:CreateTab("Scripts",4483362458)
+ST:CreateButton({Name="Infinite Yield",Callback=function()
+local s,e=pcall(function()loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()end)
+R:Notify({Title=s and "Infinite Yield Loaded" or "Load Failed",Content=s and "Infinite Yield script has been executed." or "Failed to load Infinite Yield: "..e,Duration=3})
+end})
+ST:CreateButton({Name="Dex",Callback=function()
+local s,e=pcall(function()loadstring(game:HttpGet("https://raw.githubusercontent.com/MariyaFurmanova/Library/main/dex2.0",true))()end)
+R:Notify({Title=s and "Dex Loaded" or "Load Failed",Content=s and "Dex Explorer script has been executed." or "Failed to load Dex Explorer: "..e,Duration=3})
+end})
+ST:CreateLabel("Click a button to load the respective script")
+local SLT=W:CreateTab("Slap Tower",4483362458)
+local SP=false
+local SC=0.5
+local SS="timestop"
+local function SL()
+local s,e=pcall(function()
+local RS=game:GetService("ReplicatedStorage")
+local EE=RS:WaitForChild("EquipSlapEvent",10)
+if not EE or not EE:IsA("RemoteEvent")then error("EquipSlapEvent not found or not a RemoteEvent in ReplicatedStorage")end
+local SE=SS=="timestop"and"God's Hand"or SS=="blackhole"and"GalaxySlap"or"SwapperSlap"
+print("Attempting to equip: "..SE)
+EE:FireServer(SE)
+end)
+if not s then R:Notify({Title="Equip Failed",Content="Failed to equip "..(SS=="timestop"and"God's Hand"or SS=="blackhole"and"GalaxySlap"or"SwapperSlap")..": "..(e or"unknown error")..". Check console for details.",Duration=5})print("Equip error details: "..(e or"unknown error"))SP=false return end
+while SP do
+local s,e=pcall(function()
+local CH=game:GetService("Players").LocalPlayer.Character
+if SS=="timestop"then
+if CH and CH:FindFirstChild("God's Hand")and CH["God's Hand"]:FindFirstChild("Event")then
+print("Firing timestop for LocalPlayer")
+CH["God's Hand"].Event:FireServer("timestop")
+else print("God's Hand or Event not found for LocalPlayer")end
+elseif SS=="blackhole"then
+if CH and CH:FindFirstChild("GalaxySlap")and CH.GalaxySlap:FindFirstChild("BlackholeEvent")then
+print("Firing blackhole for LocalPlayer")
+CH.GalaxySlap.BlackholeEvent:FireServer()
+else print("GalaxySlap or BlackholeEvent not found for LocalPlayer")end
+elseif SS=="tpEveryone"then
+for _,p in pairs(game:GetService("Players"):GetPlayers())do
+if p~=game:GetService("Players").LocalPlayer then
+local a={"swap",Vector3.new(167.49005126953125,71.39762115478516,-26.157346725463867),Vector3.new(92.65496826171875,15.347707748413086,-55.331329345703125),p}
+if CH and CH:FindFirstChild("SwapperSlap")and CH.SwapperSlap:FindFirstChild("Event")then
+print("Firing TP for: "..p.Name)
+CH.SwapperSlap.Event:FireServer(unpack(a))
+else print("SwapperSlap or Event not found for LocalPlayer")end
 end
-
--- Create a TextBox for entering the timestop cooldown (Slap Tower Tab)
-SlapTowerTab:CreateInput({
-    Name = "Set Timestop Cooldown (seconds)",
-    PlaceholderText = "Enter cooldown (e.g., 0.5)",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        local newCooldown = tonumber(Text) -- Convert input to number
-        if newCooldown and newCooldown >= 0 then
-            timestopCooldown = newCooldown
-            Rayfield:Notify({
-                Title = "Timestop Cooldown Updated",
-                Content = "Timestop cooldown set to " .. newCooldown .. " seconds.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Invalid Cooldown",
-                Content = "Please enter a valid number (0 or greater).",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Give Swap Slap (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Give Swap Slap",
-    Callback = function()
-        local success, err = pcall(function()
-            local args = {
-                "SwapperSlap"
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "Swap Slap Equipped",
-                Content = "SwapperSlap has been equipped.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Equip Failed",
-                Content = "Failed to equip SwapperSlap: " .. err,
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Start/Stop TP Everyone (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Start/Stop TP Everyone",
-    Callback = function()
-        isTPEveryoneLooping = not isTPEveryoneLooping -- Toggle the loop state
-        if isTPEveryoneLooping then
-            Rayfield:Notify({
-                Title = "TP Everyone Started",
-                Content = "Teleporting all players to specified coordinates.",
-                Duration = 3
-            })
-            spawn(tpEveryoneLoop) -- Start the TP loop in a new thread
-        else
-            Rayfield:Notify({
-                Title = "TP Everyone Stopped",
-                Content = "Teleport loop has been stopped.",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Give God's Hand (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Give God's Hand",
-    Callback = function()
-        local success, err = pcall(function()
-            local args = {
-                "God's Hand"
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "God's Hand Equipped",
-                Content = "God's Hand has been equipped.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Equip Failed",
-                Content = "Failed to equip God's Hand: " .. err,
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Start/Stop Timestop Spam (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Start/Stop Timestop Spam",
-    Callback = function()
-        isTimestopLooping = not isTimestopLooping -- Toggle the loop state
-        if isTimestopLooping then
-            Rayfield:Notify({
-                Title = "Timestop Spam Started",
-                Content = "Timestop is now spamming with a " .. timestopCooldown .. "s cooldown.",
-                Duration = 3
-            })
-            spawn(timestopLoop) -- Start the timestop loop in a new thread
-        else
-            Rayfield:Notify({
-                Title = "Timestop Spam Stopped",
-                Content = "Timestop spam loop has been stopped.",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Give Black Hole Slap (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Give Black Hole Slap",
-    Callback = function()
-        local success, err = pcall(function()
-            local args = {
-                "GalaxySlap"
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "Black Hole Slap Equipped",
-                Content = "GalaxySlap has been equipped.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Equip Failed",
-                Content = "Failed to equip GalaxySlap: " .. err,
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Button for Start/Stop Blackhole Spam (Slap Tower Tab)
-SlapTowerTab:CreateButton({
-    Name = "Start/Stop Blackhole Spam",
-    Callback = function()
-        isBlackholeLooping = not isBlackholeLooping -- Toggle the loop state
-        if isBlackholeLooping then
-            Rayfield:Notify({
-                Title = "Blackhole Spam Started",
-                Content = "Blackhole is now spamming with a 0.1s cooldown.",
-                Duration = 3
-            })
-            spawn(blackholeLoop) -- Start the blackhole loop in a new thread
-        else
-            Rayfield:Notify({
-                Title = "Blackhole Spam Stopped",
-                Content = "Blackhole spam loop has been stopped.",
-                Duration = 3
-            })
-        end
-    end
-})
-
--- Create a Label for instructions (Slap Tower Tab)
-SlapTowerTab:CreateLabel("Equip items, set timestop cooldown, and control Slap Tower actions")
-
--- Create the Slap Giver Tab
-local SlapGiverTab = Window:CreateTab("Slap Giver", 4483362458) -- Icon ID for a gear
-
--- Slap list for the dropdown
-local slapList = {
-    "AppleSlap", "BalloonSlap", "BigSlap", "BlockSlap", "BlowSlap", "BrickSlap",
-    "DefaultSlap", "DiamondSlap", "DiceSlap", "Error", "FruitSlap", "GalaxySlap",
-    "God's Hand", "GoldSlap", "LuckySlap", "MagnetSlap", "MailSlap", "PoisonSlap",
-    "RainbowLuckySlap", "SpinSlap", "StreakSlap", "StunSlap", "SwapperSlap",
-    "TixSlap", "TripleSlap"
-}
-
--- Variable to store the selected slap (string)
-local selectedSlap = slapList[1]
-
--- Create a Dropdown for selecting a slap (Slap Giver Tab)
-SlapGiverTab:CreateDropdown({
-    Name = "Select Slap",
-    Options = slapList,
-    CurrentOption = {selectedSlap}, -- Must be a table for CurrentOption
-    MultipleOptions = false, -- Explicitly single selection
-    Callback = function(Option)
-        selectedSlap = Option[1] -- Extract string from table (single selection)
-        Rayfield:Notify({
-            Title = "Slap Selected",
-            Content = "Selected slap: " .. selectedSlap,
-            Duration = 3
-        })
-    end
-})
-
--- Create a Button to equip the selected slap (Slap Giver Tab)
-SlapGiverTab:CreateButton({
-    Name = "Equip Selected Slap",
-    Callback = function()
-        local success, err = pcall(function()
-            local replicatedStorage = game:GetService("ReplicatedStorage")
-            local equipEvent = replicatedStorage:WaitForChild("EquipSlapEvent", 10) -- Increased to 10 seconds
-            if not equipEvent or not equipEvent:IsA("RemoteEvent") then
-                error("EquipSlapEvent not found or not a RemoteEvent in ReplicatedStorage")
-            end
-            print("Attempting to equip: " .. selectedSlap)
-            print("Event class: " .. (equipEvent.ClassName or "nil"))
-            local args = {
-                selectedSlap
-            }
-            equipEvent:FireServer(unpack(args))
-        end)
-        if success then
-            Rayfield:Notify({
-                Title = "Slap Equipped",
-                Content = selectedSlap .. " has been equipped.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Equip Failed",
-                Content = "Failed to equip " .. selectedSlap .. ": " .. (err or "unknown error") .. ". Check console for details.",
-                Duration = 5
-            })
-            print("Equip error details: " .. (err or "unknown error")) -- Log full error to console
-        end
-    end
-})
-
--- Create a Label for instructions (Slap Giver Tab)
-SlapGiverTab:CreateLabel("Select a slap and click to equip it")
+end
+end
+end)
+if not s then warn("Spam error: "..e)end
+wait(SC)
+end
+end
+SLT:CreateInput({Name="Set Spam Cooldown (seconds)",PlaceholderText="Enter cooldown (e.g., 0.5)",RemoveTextAfterFocusLost=false,Callback=function(t)
+local n=tonumber(t)
+if n and n>=0 then SC=n;R:Notify({Title="Spam Cooldown Updated",Content="Spam cooldown set to "..n.." seconds.",Duration=3})
+else R:Notify({Title="Invalid Cooldown",Content="Please enter a valid number (0 or greater).",Duration=3})end
+end})
+SLT:CreateDropdown({Name="Select Spam Type",Options={"timestop","blackhole","tpEveryone"},CurrentOption={SS},MultipleOptions=false,Callback=function(o)SS=o[1]R:Notify({Title="Spam Type Selected",Content="Selected spam: "..SS,Duration=3})end})
+SLT:CreateButton({Name="Start Spam",Callback=function()SP=not SP
+if SP then R:Notify({Title="Spam Started",Content="Spamming "..SS.." with a "..SC.."s cooldown (equipping related slap).",Duration=3})spawn(SL)
+else R:Notify({Title="Spam Stopped",Content="Spamming "..SS.." has been stopped.",Duration=3})end
+end})
+SLT:CreateLabel("Select spam type, set cooldown, and start spamming")
+local SGT=W:CreateTab("Slap Giver",4483362458)
+local SL={"AppleSlap","BalloonSlap","BigSlap","BlockSlap","BlowSlap","BrickSlap","DefaultSlap","DiamondSlap","DiceSlap","Error","FruitSlap","GalaxySlap","God's Hand","GoldSlap","LuckySlap","MagnetSlap","MailSlap","PoisonSlap","RainbowLuckySlap","SpinSlap","StreakSlap","StunSlap","SwapperSlap","TixSlap","TripleSlap"}
+local SEL=SL[1]
+SGT:CreateDropdown({Name="Select Slap",Options=SL,CurrentOption={SEL},MultipleOptions=false,Callback=function(o)SEL=o[1]R:Notify({Title="Slap Selected",Content="Selected slap: "..SEL,Duration=3})end})
+SGT:CreateButton({Name="Equip Selected Slap",Callback=function()
+local s,e=pcall(function()
+local RS=game:GetService("ReplicatedStorage")
+local EE=RS:WaitForChild("EquipSlapEvent",10)
+if not EE or not EE:IsA("RemoteEvent")then error("EquipSlapEvent not found or not a RemoteEvent in ReplicatedStorage")end
+print("Attempting to equip: "..SEL)
+EE:FireServer(SEL)
+end)
+R:Notify({Title=s and"Slap Equipped"or"Equip Failed",Content=s and SEL.." has been equipped." or"Failed to equip "..SEL..": "..(e or"unknown error")..". Check console for details.",Duration=s and 3 or 5})
+if not s then print("Equip error details: "..(e or"unknown error"))end
+end})
+SGT:CreateLabel("Select a slap and click to equip it")
