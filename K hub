@@ -116,53 +116,42 @@ local function SL()
         local s, e = pcall(function()
             local CH = game:GetService("Players").LocalPlayer.Character
             if SS == "timestop" then
-                while true do
-                    if CH and CH:FindFirstChild("God's Hand") and CH["God's Hand"]:FindFirstChild("Event") then
-                        print("Firing timestop for LocalPlayer")
-                        CH["God's Hand"].Event:FireServer("timestop")
-                    else
-                        print("God's Hand or Event not found for LocalPlayer")
-                    end
-                    wait()
+                if CH and CH:FindFirstChild("God's Hand") and CH["God's Hand"]:FindFirstChild("Event") then
+                    print("Firing timestop for LocalPlayer")
+                    CH["God's Hand"].Event:FireServer("timestop")
+                else
+                    print("God's Hand or Event not found for LocalPlayer")
                 end
             elseif SS == "blackhole" then
-                while true do
-                    if CH and CH:FindFirstChild("GalaxySlap") and CH.GalaxySlap:FindFirstChild("BlackholeEvent") then
-                        print("Firing blackhole for LocalPlayer")
-                        CH.GalaxySlap.BlackholeEvent:FireServer()
-                    else
-                        print("GalaxySlap or BlackholeEvent not found for LocalPlayer")
-                    end
-                    wait()
+                if CH and CH:FindFirstChild("GalaxySlap") and CH.GalaxySlap:FindFirstChild("BlackholeEvent") then
+                    print("Firing blackhole for LocalPlayer")
+                    CH.GalaxySlap.BlackholeEvent:FireServer()
+                else
+                    print("GalaxySlap or BlackholeEvent not found for LocalPlayer")
                 end
             elseif SS == "tpEveryone" then
-                while true do
-                    for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-                        if p ~= game:GetService("Players").LocalPlayer then
-                            local a = {"swap", Vector3.new(167.49005126953125, 71.39762115478516, -26.157346725463867), Vector3.new(92.65496826171875, 15.347707748413086, -55.331329345703125), p}
-                            if CH and CH:FindFirstChild("SwapperSlap") and CH.SwapperSlap:FindFirstChild("Event") then
-                                print("Firing TP for: " .. p.Name)
-                                CH.SwapperSlap.Event:FireServer(unpack(a))
-                            else
-                                print("SwapperSlap or Event not found for LocalPlayer")
-                            end
+                for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+                    if p ~= game:GetService("Players").LocalPlayer then
+                        local a = {"swap", Vector3.new(167.49005126953125, 71.39762115478516, -26.157346725463867), Vector3.new(92.65496826171875, 15.347707748413086, -55.331329345703125), p}
+                        if CH and CH:FindFirstChild("SwapperSlap") and CH.SwapperSlap:FindFirstChild("Event") then
+                            print("Firing TP for: " .. p.Name)
+                            CH.SwapperSlap.Event:FireServer(unpack(a))
+                        else
+                            print("SwapperSlap or Event not found for LocalPlayer")
                         end
                     end
-                    wait()
                 end
             elseif SS == "tixRain" then
-                while true do
-                    if CH and CH:FindFirstChild("TixSlap") and CH.TixSlap:FindFirstChild("Event") then
-                        print("Firing tix_skill for LocalPlayer")
-                        CH.TixSlap.Event:FireServer("tix_skill")
-                    else
-                        print("TixSlap or Event not found for LocalPlayer")
-                    end
-                    wait()
+                if CH and CH:FindFirstChild("TixSlap") and CH.TixSlap:FindFirstChild("Event") then
+                    print("Firing tix_skill for LocalPlayer")
+                    CH.TixSlap.Event:FireServer("tix_skill")
+                else
+                    print("TixSlap or Event not found for LocalPlayer")
                 end
             end
         end)
         if not s then warn("Spam error: " .. e) end
+        wait()
     end
 end
 
