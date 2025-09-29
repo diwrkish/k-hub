@@ -24,7 +24,7 @@ e(b)e(k)
 
 local n=0 local o=0.3
 k.MouseButton1Click:Connect(function()print("Debug: CircleButton clicked")local a=tick()if a-n<o then b.Visible=true k.Visible=false if T then T:Create(b,TweenInfo.new(0.3),{BackgroundTransparency=0.1}):Play()end end n=a end)
-k.TouchTap:Connect(function()print("Debug: CircleButton touched")local a=tick()if a-n<o then b.Visible=false k.Visible=true if T then T:Create(b,TweenInfo.new(0.3),{BackgroundTransparency=0.1}):Play()end end n=a end)
+k.TouchTap:Connect(function()print("Debug: CircleButton touched")local a=tick()if a-n<o then b.Visible=true k.Visible=false if T then T:Create(b,TweenInfo.new(0.3),{BackgroundTransparency=0.1}):Play()end end n=a end)
 
 local function p(a)print("Debug: Executing script")local s,err=pcall(function()loadstring(a)()end)if not s then print("Execution error: "..tostring(err))end end
 
@@ -47,14 +47,19 @@ local u=Instance.new("Frame")u.Size=UDim2.new(0.94,0,0.55,0)u.Position=UDim2.new
 local v=Instance.new("TextButton")v.Size=UDim2.new(0.45,0,0.3,0)v.Position=UDim2.new(0.03,0,0.1,0)v.BackgroundColor3=Color3.fromRGB(0,50,100)v.Text="Infinite Yield"v.TextColor3=Color3.fromRGB(200,200,200)v.TextScaled=true v.Font=Enum.Font.GothamBold v.Parent=u v.BackgroundTransparency=0.2 v.AutoButtonColor=true
 local w=Instance.new("TextButton")w.Size=UDim2.new(0.45,0,0.3,0)w.Position=UDim2.new(0.52,0,0.1,0)w.BackgroundColor3=Color3.fromRGB(0,50,100)w.Text="LALOL Hub"w.TextColor3=Color3.fromRGB(200,200,200)w.TextScaled=true w.Font=Enum.Font.GothamBold w.Parent=u w.BackgroundTransparency=0.2 w.AutoButtonColor=true
 local x=Instance.new("TextButton")x.Size=UDim2.new(0,50,0,30)x.Position=UDim2.new(0.03,0,0.03,0)x.BackgroundColor3=Color3.fromRGB(40,40,40)x.Text="Scripts"x.TextColor3=Color3.fromRGB(200,200,200)x.TextScaled=true x.Font=Enum.Font.Gotham x.Parent=b x.BackgroundTransparency=0.2 x.AutoButtonColor=true
+local y=Instance.new("TextButton")y.Size=UDim2.new(0.45,0,0.3,0)y.Position=UDim2.new(0.03,0,0.4,0)y.BackgroundColor3=Color3.fromRGB(0,50,100)y.Text="iy reborn"y.TextColor3=Color3.fromRGB(200,200,200)y.TextScaled=true y.Font=Enum.Font.GothamBold y.Parent=u y.BackgroundTransparency=0.2 y.AutoButtonColor=true
+local z=Instance.new("TextButton")z.Size=UDim2.new(0.45,0,0.3,0)z.Position=UDim2.new(0.52,0,0.4,0)z.BackgroundColor3=Color3.fromRGB(0,50,100)z.Text="zephyr hub"z.TextColor3=Color3.fromRGB(200,200,200)z.TextScaled=true z.Font=Enum.Font.GothamBold z.Parent=u z.BackgroundTransparency=0.2 z.AutoButtonColor=true
+
 x.MouseButton1Click:Connect(function()print("Debug: Switching tabs")g.Visible=not g.Visible u.Visible=not u.Visible end)
 v.MouseButton1Click:Connect(function()print("Debug: Loading Infinite Yield")p('loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()')end)
 w.MouseButton1Click:Connect(function()print("Debug: Loading LALOL Hub")p("loadstring(game:HttpGet('https://raw.githubusercontent.com/Its-LALOL/LALOL-Hub/main/Backdoor-Scanner/script'))()")end)
+y.MouseButton1Click:Connect(function()print("Debug: Loading iy reborn")p('loadstring(game:HttpGet(("https://raw.githubusercontent.com/mxsynry/infiniteyield-reborn/refs/heads/scriptblox/source" or "https://mxsynry.github.io/storage/iyrbackup/legacy/scriptblox/source")))()')end)
+z.MouseButton1Click:Connect(function()print("Debug: Loading zephyr hub")p('loadstring(game:HttpGet("https://pandadevelopment.net/virtual/file/7903e37c198ca203"))()')end)
 
 U.InputBegan:Connect(function(a,b)if not b and a.UserInputType==Enum.UserInputType.Keyboard and a.KeyCode==Enum.KeyCode.E and U:IsKeyDown(Enum.KeyCode.LeftControl)then print("Debug: Toggle hotkey pressed")b.Visible=not b.Visible k.Visible=not b.Visible if k.Visible then d()end end end)
 
-local function y()if U.TouchEnabled and b then print("Debug: Adjusting for mobile") b.Size=UDim2.new(0.85,0,0.65,0)b.Position=UDim2.new(0.5,-b.Size.X.Offset/2,0.5,-b.Size.Y.Offset/2)g.TextSize=18 i.TextSize=20 j.TextSize=20 f.TextSize=20 x.TextSize=18 v.TextSize=18 w.TextSize=18 if a then t("Mobile mode detected: UI scaled for touch.")end end end
-y()
+local function A()if U.TouchEnabled and b then print("Debug: Adjusting for mobile") b.Size=UDim2.new(0.85,0,0.65,0)b.Position=UDim2.new(0.5,-b.Size.X.Offset/2,0.5,-b.Size.Y.Offset/2)g.TextSize=18 i.TextSize=20 j.TextSize=20 f.TextSize=20 x.TextSize=18 v.TextSize=18 w.TextSize=18 y.TextSize=18 z.TextSize=18 if a then t("Mobile mode detected: UI scaled for touch.")end end end
+A()
 
 g.Text=[[
 print("K Hub Executor: Test script executed!")
